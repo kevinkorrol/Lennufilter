@@ -1,28 +1,29 @@
 package org.example.backend.conf;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import org.springframework.data.annotation.Id;
 
+@Entity
+@Table(name = "istmed")
 public class Iste {
 
+    @jakarta.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int rowNumber;
-
-    private String seatLetter;
-
-    private boolean isOccupied;
-
-    private String seatType;
-
     @ManyToOne
     @JoinColumn(name = "reis_id")
-    private Flight flight;
+    private Lend lend;
+
+    private int reanumber;
+
+    private String istmetaht;
+
+    private boolean kasvaba;
+
+    private String istmetyyp;
+
 
     // Getters and setters
     public Long getId() {
@@ -33,43 +34,43 @@ public class Iste {
         this.id = id;
     }
 
-    public int getRowNumber() {
-        return rowNumber;
+    public int getReanumber() {
+        return reanumber;
     }
 
-    public void setRowNumber(int rowNumber) {
-        this.rowNumber = rowNumber;
+    public void setReanumber(int reanumber) {
+        this.reanumber = reanumber;
     }
 
-    public String getSeatLetter() {
-        return seatLetter;
+    public String getIstmetaht() {
+        return istmetaht;
     }
 
-    public void setSeatLetter(String seatLetter) {
-        this.seatLetter = seatLetter;
+    public void setIstmetaht(String istmetaht) {
+        this.istmetaht = istmetaht;
     }
 
-    public boolean isOccupied() {
-        return isOccupied;
+    public boolean isKasvaba() {
+        return kasvaba;
     }
 
-    public void setOccupied(boolean occupied) {
-        isOccupied = occupied;
+    public void setKasvaba(boolean kasvaba) {
+        this.kasvaba = kasvaba;
     }
 
-    public String getSeatType() {
-        return seatType;
+    public String getIstmetyyp() {
+        return istmetyyp;
     }
 
-    public void setSeatType(String seatType) {
-        this.seatType = seatType;
+    public void setIstmetyyp(String istmetyyp) {
+        this.istmetyyp = istmetyyp;
     }
 
-    public Flight getFlight() {
-        return flight;
+    public Lend getLend() {
+        return lend;
     }
 
-    public void setFlight(Flight flight) {
-        this.flight = flight;
+    public void setLend(Lend lend) {
+        this.lend = lend;
     }
 }

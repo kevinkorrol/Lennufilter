@@ -1,21 +1,57 @@
 package org.example.backend.conf;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+
+
+@Entity(name = "Lend")
+@Table(name = "reisid")
+
 
 public class Lend {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String sihtkoht;
 
-    private LocalDateTime v;
+    private String alguskoht;
 
-    private Double price;
+
+    private LocalDateTime lennuaeg;
+
+    private Double hind;
+
+    private Date kuupaev;
+
+
+    public Lend(String sihtkoht, String alguskoht, LocalDateTime lennuaeg, Double hind, Date kuupaev) {
+        this.sihtkoht = sihtkoht;
+        this.alguskoht = alguskoht;
+        this.lennuaeg = lennuaeg;
+        this.hind = hind;
+        this.kuupaev = kuupaev;
+    }
+
+    public String getAlguskoht() {
+        return alguskoht;
+    }
+
+    public void setAlguskoht(String alguskoht) {
+        this.alguskoht = alguskoht;
+    }
+
+    public Date getKuupaev() {
+        return kuupaev;
+    }
+
+    public void setKuupaev(Date kuupaev) {
+        this.kuupaev = kuupaev;
+    }
 
     // Getters and setters
     public Long getId() {
@@ -34,19 +70,19 @@ public class Lend {
         this.sihtkoht = sihtkoht;
     }
 
-    public LocalDateTime getDepartureTime() {
-        return departureTime;
+    public LocalDateTime getLennuaeg() {
+        return lennuaeg;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
-        this.departureTime = departureTime;
+    public void setLennuaeg(LocalDateTime lennuaeg) {
+        this.lennuaeg = lennuaeg;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getHind() {
+        return hind;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setHind(Double hind) {
+        this.hind = hind;
     }
 }
