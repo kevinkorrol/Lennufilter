@@ -1,7 +1,6 @@
-package org.example.backend.conf;
+package org.example.backend.objects;
 
 
-import org.example.backend.conf.Iste;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

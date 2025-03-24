@@ -1,4 +1,4 @@
-package org.example.backend.conf;
+package org.example.backend.objects;
 
 import jakarta.persistence.*;
 
