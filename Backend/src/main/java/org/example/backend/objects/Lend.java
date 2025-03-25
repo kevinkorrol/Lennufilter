@@ -6,15 +6,24 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 
-@Entity(name = "Lend")
-@Table(name = "reisid")
+@Entity(name = "lend")
+@Table(name = "lennud")
 
 
 public class Lend {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "lend_sequence",
+            sequenceName = "lend_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "lend_sequence"
+    )
+
     private Long id;
     private String sihtkoht;
     private String alguskoht;
