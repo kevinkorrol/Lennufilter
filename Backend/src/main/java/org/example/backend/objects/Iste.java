@@ -1,19 +1,22 @@
 package org.example.backend.objects;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
-@Entity
+@Entity(name = "iste")
 @Table(name = "istmed")
 public class Iste {
 
-    @jakarta.persistence.Id
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "iste_sequence",
+            sequenceName = "iste_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "iste_sequence")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "reis_id")
+    @JoinColumn(name = "lend_id")//enne oli "reis_id"
     private Lend lend;
     private int reanumber;
     private String istmetaht;
@@ -80,5 +83,17 @@ public class Iste {
 
     public void setLend(Lend lend) {
         this.lend = lend;
+    }
+
+    @Override
+    public String toString() {
+        return "Iste{" +
+                "id=" + id +
+                ", lend=" + lend +
+                ", reanumber=" + reanumber +
+                ", istmetaht='" + istmetaht + '\'' +
+                ", kasvaba=" + kasvaba +
+                ", istmetyyp='" + istmetyyp + '\'' +
+                '}';
     }
 }

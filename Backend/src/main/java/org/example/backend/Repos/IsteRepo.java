@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface IsteRepo extends JpaRepository<Iste, Long> {
-    List<Iste> findByLendId(Long lendId);
 }

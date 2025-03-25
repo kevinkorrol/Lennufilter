@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LendService {
 
-    private final LendRepo lendRepo;
+    private LendRepo lendRepo;
 
     @Autowired
     public LendService(LendRepo lendRepo) {
@@ -19,5 +20,9 @@ public class LendService {
 
     public List<Lend> getLend(){
         return lendRepo.findAll();
+    }
+
+    public void lisaUusLend(Lend lend) {
+        lendRepo.save(lend);
     }
 }
