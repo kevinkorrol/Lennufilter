@@ -15,15 +15,19 @@ public class Iste {
     @ManyToOne
     @JoinColumn(name = "reis_id")
     private Lend lend;
-
     private int reanumber;
-
     private String istmetaht;
-
     private boolean kasvaba;
-
     private String istmetyyp;
 
+    public Iste(Long id, Lend lend, int reanumber, String istmetaht, boolean kasvaba, String istmetyyp) {
+        this.id = id;
+        this.lend = lend;
+        this.reanumber = reanumber;
+        this.istmetaht = istmetaht;
+        this.kasvaba = kasvaba;
+        this.istmetyyp = istmetyyp;
+    }
 
     // Getters and setters
     public Long getId() {

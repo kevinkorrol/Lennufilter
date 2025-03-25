@@ -1,6 +1,7 @@
-package org.example.backend.objects;
+package org.example.backend.Repos;
 
 
+import org.example.backend.objects.Lend;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

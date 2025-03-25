@@ -16,25 +16,23 @@ public class Lend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String sihtkoht;
-
     private String alguskoht;
-
-
     private LocalDateTime lennuaeg;
-
-    private Double hind;
-
     private Date kuupaev;
+    private Double hind;
+    private String lennufirma;
 
 
-    public Lend(String sihtkoht, String alguskoht, LocalDateTime lennuaeg, Double hind, Date kuupaev) {
+
+    public Lend(String sihtkoht, String alguskoht, LocalDateTime lennuaeg, Double hind, Date kuupaev, String lennufirma) {
         this.sihtkoht = sihtkoht;
         this.alguskoht = alguskoht;
         this.lennuaeg = lennuaeg;
-        this.hind = hind;
         this.kuupaev = kuupaev;
+        this.hind = hind;
+        this.lennufirma = lennufirma;
+
     }
 
     public String getAlguskoht() {
@@ -53,7 +51,6 @@ public class Lend {
         this.kuupaev = kuupaev;
     }
 
-    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -84,5 +81,26 @@ public class Lend {
 
     public void setHind(Double hind) {
         this.hind = hind;
+    }
+
+    public String getLennufirma() {
+        return lennufirma;
+    }
+
+    public void setLennufirma(String lennufirma) {
+        this.lennufirma = lennufirma;
+    }
+
+    @Override
+    public String toString() {
+        return "Lend{" +
+                "id=" + id +
+                ", sihtkoht='" + sihtkoht + '\'' +
+                ", alguskoht='" + alguskoht + '\'' +
+                ", lennuaeg=" + lennuaeg +
+                ", kuupaev=" + kuupaev +
+                ", hind=" + hind +
+                ", lennufirma='" + lennufirma + '\'' +
+                '}';
     }
 }
