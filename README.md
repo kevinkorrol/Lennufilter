@@ -8,7 +8,7 @@ Front:
 - text
 
 Back:
-- Conf -
+- Conf - Loon lennud ja istmed
 - Controllers - API failid, suhtlus frontendiga
 - Objects - Lend ja istmed ning andmebaaside loomine
 - Repos - Suhtlus andmebaasiga
