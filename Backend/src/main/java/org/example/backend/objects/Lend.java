@@ -2,6 +2,7 @@ package org.example.backend.objects;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -28,19 +29,23 @@ public class Lend {
     private String sihtkoht;
     private String alguskoht;
     private LocalDateTime lennuaeg;
-    private Date kuupaev;
+    private LocalDate kuupaev;
     private Double hind;
     private String lennufirma;
 
 
 
-    public Lend(String sihtkoht, String alguskoht, LocalDateTime lennuaeg, Double hind, Date kuupaev, String lennufirma) {
+    public Lend(String sihtkoht, String alguskoht, LocalDateTime lennuaeg, Double hind, LocalDate kuupaev, String lennufirma) {
         this.sihtkoht = sihtkoht;
         this.alguskoht = alguskoht;
         this.lennuaeg = lennuaeg;
         this.kuupaev = kuupaev;
         this.hind = hind;
         this.lennufirma = lennufirma;
+
+    }
+
+    public Lend() {
 
     }
 
@@ -52,11 +57,11 @@ public class Lend {
         this.alguskoht = alguskoht;
     }
 
-    public Date getKuupaev() {
+    public LocalDate getKuupaev() {
         return kuupaev;
     }
 
-    public void setKuupaev(Date kuupaev) {
+    public void setKuupaev(LocalDate kuupaev) {
         this.kuupaev = kuupaev;
     }
 

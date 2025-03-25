@@ -29,6 +29,10 @@ public class Iste {
         this.istmetyyp = istmetyyp;
     }
 
+    public Iste() {
+
+    }
+
     // Getters and setters
     public Long getId() {
         return id;
