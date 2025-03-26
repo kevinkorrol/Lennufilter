@@ -5,6 +5,7 @@ import org.example.backend.objects.Lend;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +15,8 @@ import java.util.List;
 @Configuration
 public class LendConf {
 
-    @Bean
+    @Bean(name = "lendCommandLineRunner")
+    @Order(1)
     CommandLineRunner commandLineRunner(LendRepo repo){
         return args -> {
             Lend tallinnPariis = new Lend(

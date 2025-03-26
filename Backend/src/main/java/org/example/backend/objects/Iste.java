@@ -12,7 +12,7 @@ public class Iste {
             sequenceName = "iste_sequence",
             allocationSize = 1
     )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "iste_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -21,15 +21,13 @@ public class Iste {
     private int reanumber;
     private String istmetaht;
     private boolean kasvaba;
-    private String istmetyyp;
 
-    public Iste(Long id, Lend lend, int reanumber, String istmetaht, boolean kasvaba, String istmetyyp) {
-        this.id = id;
+
+    public Iste(Lend lend, int reanumber, String istmetaht, boolean kasvaba) {
         this.lend = lend;
         this.reanumber = reanumber;
         this.istmetaht = istmetaht;
         this.kasvaba = kasvaba;
-        this.istmetyyp = istmetyyp;
     }
 
     public Iste() {
@@ -37,6 +35,7 @@ public class Iste {
     }
 
     // Getters and setters
+
     public Long getId() {
         return id;
     }
@@ -69,13 +68,6 @@ public class Iste {
         this.kasvaba = kasvaba;
     }
 
-    public String getIstmetyyp() {
-        return istmetyyp;
-    }
-
-    public void setIstmetyyp(String istmetyyp) {
-        this.istmetyyp = istmetyyp;
-    }
 
     public Lend getLend() {
         return lend;
@@ -88,12 +80,10 @@ public class Iste {
     @Override
     public String toString() {
         return "Iste{" +
-                "id=" + id +
                 ", lend=" + lend +
                 ", reanumber=" + reanumber +
                 ", istmetaht='" + istmetaht + '\'' +
                 ", kasvaba=" + kasvaba +
-                ", istmetyyp='" + istmetyyp + '\'' +
                 '}';
     }
 }

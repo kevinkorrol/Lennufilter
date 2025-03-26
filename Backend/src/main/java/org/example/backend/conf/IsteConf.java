@@ -1,11 +1,17 @@
 package org.example.backend.conf;
 
 import org.example.backend.Repos.IsteRepo;
+import org.example.backend.Repos.LendRepo;
+import org.example.backend.objects.Iste;
+import org.example.backend.objects.Lend;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import java.util.*;
 
+@Configuration
 public class IsteConf {
 
 
@@ -35,17 +41,33 @@ public class IsteConf {
         return kinni;
     }
 
-    @Bean
-    CommandLineRunner commandLineRunner(IsteRepo repo){//Loob andmebaasi kirjed
+    @Bean(name = "isteCommandLineRunner")
+    @Order(2)
+    CommandLineRunner commandLineRunner(IsteRepo istmerepo, LendRepo lendRepo){//Loob andmebaasi kirjed
         List<String> koikKohad = koikKohad();
 
         return args -> {//Genereerin igale lennule suvaliselt kinnised kohad
-            List<String> kinni = kinnisedKohad(70);
-            //Siia on vaja mingit findAll(lennud) meetodit, mis leiaks mulle kõik lennud
-            //For lend in lennud
-            //For koht in lend
-            //Loon uue Iste isendi:
-            //If lend in kinni siis kinni = true
+
+            List<Lend> lennud = lendRepo.findAll();
+
+
+            for (Lend lend : lennud){
+                List<String> kinni = kinnisedKohad(70);
+
+                for(String koht : koikKohad){
+
+                    String tahis = koht.split(" ")[1];
+                    String nr = koht.split(" ")[0];
+                    boolean kinnisus;
+                    if (kinni.contains(koht)){
+                        kinnisus = false;
+                    }else{
+                        kinnisus = true;
+                    }
+                    Iste iste = new Iste(lend, Integer.parseInt(nr), tahis, kinnisus);
+                    istmerepo.save(iste);
+                }
+            }
             //A, F - akna all
             //C, D - rohkem ruumi
             //Read 1 kuni 5, a-5 kuni a - lähedal väljapääsule
