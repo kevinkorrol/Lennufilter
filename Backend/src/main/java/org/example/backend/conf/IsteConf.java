@@ -60,12 +60,9 @@ public class IsteConf {
                     String nr = koht.split(" ")[0];
                     boolean kinnisus;
                     if (kinni.contains(koht)){
-                        kinnisus = false;
-                    }else{
-                        kinnisus = true;
+                        Iste iste = new Iste(lend, Integer.parseInt(nr), tahis, false);
+                        istmerepo.save(iste);
                     }
-                    Iste iste = new Iste(lend, Integer.parseInt(nr), tahis, kinnisus);
-                    istmerepo.save(iste);
                 }
             }
             //A, F - akna all

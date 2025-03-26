@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalLong;
 
 @Service
 public class LendService {
@@ -24,5 +25,9 @@ public class LendService {
 
     public void lisaUusLend(Lend lend) {
         lendRepo.save(lend);
+    }
+
+    public Optional<Lend> getLendById(Long id) {
+        return lendRepo.findById(id);
     }
 }
