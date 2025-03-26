@@ -48,7 +48,9 @@ public class IsteConf {
             //If lend in kinni siis kinni = true
             //A, F - akna all
             //C, D - rohkem ruumi
-            //Read 1 kuni 5, a-5 kuni 5 - lähedal väljapääsule
+            //Read 1 kuni 5, a-5 kuni a - lähedal väljapääsule
+            //Vb pole vaja teha eraldi istmetüüpi, vaid saan kuskil hiljem
+            // filtreerida vastaval oma ärireeglitele
         };
     }
 }
