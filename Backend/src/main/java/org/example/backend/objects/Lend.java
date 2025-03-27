@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Duration;
 
 
 @Entity(name = "lend")
@@ -26,14 +27,14 @@ public class Lend {
     private Long id;
     private String sihtkoht;
     private String alguskoht;
-    private LocalDateTime lennuaeg;
+    private Double lennuaeg;
     private LocalDate kuupaev;
     private Double hind;
     private String lennufirma;
 
 
 
-    public Lend(String sihtkoht, String alguskoht, LocalDateTime lennuaeg, Double hind, LocalDate kuupaev, String lennufirma) {
+    public Lend(String sihtkoht, String alguskoht, Double lennuaeg, Double hind, LocalDate kuupaev, String lennufirma) {
         this.sihtkoht = sihtkoht;
         this.alguskoht = alguskoht;
         this.lennuaeg = lennuaeg;
@@ -79,11 +80,11 @@ public class Lend {
         this.sihtkoht = sihtkoht;
     }
 
-    public LocalDateTime getLennuaeg() {
+    public Double getLennuaeg() {
         return lennuaeg;
     }
 
-    public void setLennuaeg(LocalDateTime lennuaeg) {
+    public void setLennuaeg(Double lennuaeg) {
         this.lennuaeg = lennuaeg;
     }
 

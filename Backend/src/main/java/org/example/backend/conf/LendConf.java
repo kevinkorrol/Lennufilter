@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -22,7 +23,7 @@ public class LendConf {
             Lend tallinnPariis = new Lend(
                     "Pariis",
                     "Tallinn",
-                    LocalDateTime.now().plus(3, ChronoUnit.HOURS),
+                    3.5,
                     200.0,
                     LocalDate.of(2025, 3, 25),
                     "RyanAir"
@@ -31,7 +32,7 @@ public class LendConf {
             Lend tallinnLondon = new Lend(
                     "London",
                     "Tallinn",
-                    LocalDateTime.now().plus(3, ChronoUnit.HOURS),
+                    4.3,
                     150.0,
                     LocalDate.of(2025, 3, 27),
                     "RyanAir"
