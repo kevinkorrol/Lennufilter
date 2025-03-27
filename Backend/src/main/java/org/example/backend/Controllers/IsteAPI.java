@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/iste")
-
+@RequestMapping(path = "api")
+@CrossOrigin(origins = "http://localhost:3000")
 public class IsteAPI {
     private IsteService isteService;
 
@@ -19,10 +19,14 @@ public class IsteAPI {
         this.isteService = isteService;
     }
 
-    @GetMapping
-
+    @GetMapping("/istmed")
     public List<Iste> getIste(){
         return isteService.getIste();
+    }
+
+    @GetMapping("/lend/{lennuId}")
+    public List<Iste> getIstekohadByLennuId(@PathVariable("lennuId") Long lennuId) {
+        return isteService.getIstekohadByLennuId(lennuId);
     }
 
     @PostMapping

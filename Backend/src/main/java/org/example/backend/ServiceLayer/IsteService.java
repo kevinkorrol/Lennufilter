@@ -25,4 +25,8 @@ public class IsteService {
     public void lisaUusIste(Iste iste){
         isteRepo.save(iste);
     }
+
+    public List<Iste> getIstekohadByLennuId(Long lennuId) {
+        return isteRepo.findByLendId(lennuId);
+    }
 }
