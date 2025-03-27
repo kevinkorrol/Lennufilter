@@ -7,7 +7,6 @@ Kevin Markus Korrol - CGI 2025
 Front:
 - Next.js
 - TypeScript
-- Tailwind
 
 Back:
 - Springboot
