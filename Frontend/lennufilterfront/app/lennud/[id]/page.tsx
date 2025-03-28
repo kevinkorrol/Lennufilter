@@ -24,6 +24,10 @@ export default function LendDetail() {
   const { id } = useParams();
   const [kohad, setKohad] = useState<Iste[]>([]);
   const [lend, setLend] = useState<Lend | null>(null);
+  const [aknaAll, setAknaAll] = useState(false);
+  const [ruumiga, setRuumiga] = useState(false);
+  const [lähimVäljapääs, setLähimVäljapääs] = useState(false);
+  const [kõrvuti, setKõrvuti] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -46,6 +50,44 @@ export default function LendDetail() {
       .catch((err) => console.error("Fetch error:", err));
   }, [id]);
 
+  const filterKohad = () => {
+    const vabadKohad = kohad.filter((iste) => {
+      return (
+        iste.kasvaba && 
+        (aknaAll ? (iste.istmetaht === "A" || iste.istmetaht === "F") : true) &&
+        (ruumiga ? (iste.istmetaht === "C" || iste.istmetaht === "D") : true) &&
+        (lähimVäljapääs ? (iste.reanumber >= 1 && iste.reanumber <= 5 || iste.reanumber >= 25 && iste.reanumber <= 30) : true) 
+      );
+    });
+
+    return vabadKohad;
+  };
+
+  const findAdjacentSeats = (vabadKohad: Iste[], numIstmeid: number) => {
+    const sobivadKohad: Iste[][] = [];
+
+    for (let i = 0; i < vabadKohad.length - numIstmeid + 1; i++) {
+      let temp = [vabadKohad[i]];
+
+      for (let j = 1; j < numIstmeid; j++) {
+        if (vabadKohad[i + j].kasvaba) {
+          temp.push(vabadKohad[i + j]);
+        } else {
+          break;
+        }
+      }
+
+      if (temp.length === numIstmeid) {
+        sobivadKohad.push(temp);
+      }
+    }
+
+    return sobivadKohad;
+  };
+
+  const kohadFiltreeritud = filterKohad();
+  const kõrvutiIstmed = kõrvuti > 0 ? findAdjacentSeats(kohadFiltreeritud, kõrvuti) : [];
+
   return (
     <div>
       {lend ? (
@@ -60,13 +102,69 @@ export default function LendDetail() {
               Lennu aeg: {lend.lennuaeg} tundi
             </p>
           </div>
+          <div>
+            <h2>Filtrid</h2>
+            <label>
+              <input
+                type="checkbox"
+                checked={aknaAll}
+                onChange={() => setAknaAll(!aknaAll)}
+              />
+              Akna all
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={ruumiga}
+                onChange={() => setRuumiga(!ruumiga)}
+              />
+              Rohkem ruumi
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={lähimVäljapääs}
+                onChange={() => setLähimVäljapääs(!lähimVäljapääs)}
+              />
+              Lähedal väljapääsule
+            </label>
+            <label>
+              Kõrvuti istmed (sisesta number):
+              <input
+                type="number"
+                value={kõrvuti}
+                onChange={(e) => setKõrvuti(Number(e.target.value))}
+                min={0}
+              />
+            </label>
+          </div>
           <h2>Istmeplaan</h2>
           <ul>
-            {kohad.map((iste) => (
-              <li key={iste.id}>
-                Rida: {iste.reanumber}, Koht: {iste.istmetaht}, Hõivatud: {iste.kasvaba ? "Ei" : "Jah"}
+            {kõrvutiIstmed.length > 0 ? (
+              <li>
+                Kõrvuti sobivad istmed:
+                <ul>
+                  {kõrvutiIstmed.map((kohaGrupp, index) => (
+                    <li key={index}>
+                      {kohaGrupp.map((iste) => (
+                        <span key={iste.id}>{iste.reanumber}{iste.istmetaht} </span>
+                      ))}
+                    </li>
+                  ))}
+                </ul>
               </li>
-            ))}
+            ) : (
+              <li>Kõrvuti istmeid ei leitud</li>
+            )}
+            {kohadFiltreeritud.length > 0 ? (
+              kohadFiltreeritud.map((iste) => (
+                <li key={iste.id}>
+                  Rida {iste.reanumber}, Koht {iste.istmetaht}, {iste.kasvaba ? "Vaba" : "Hõivatud"}
+                </li>
+              ))
+            ) : (
+              <p>Ei leitud vabu kohti vastavalt valitud filtritele.</p>
+            )}
           </ul>
         </>
       ) : (
