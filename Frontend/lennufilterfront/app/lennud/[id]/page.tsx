@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 
 type Iste = {
   id: number;
@@ -21,27 +21,34 @@ type Lend = {
 };
 
 export default function LendDetail() {
-  const pathname = usePathname();
-  const id = pathname.split('/')[2];
+  const { id } = useParams();
   const [kohad, setKohad] = useState<Iste[]>([]);
   const [lend, setLend] = useState<Lend | null>(null);
 
   useEffect(() => {
     if (!id) return;
 
+    console.log("Lennu ID:", id);
+
     fetch(`http://localhost:8080/api/lend/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        setLend(data.lend);
-        setKohad(data.kohad || []);
+        console.log("Saadud andmed:", data);
+
+        if (data.length > 0) {
+          setLend(data[0].lend); 
+          setKohad(data);        
+        } else {
+          setLend(null);
+          setKohad([]);
+        }
       })
       .catch((err) => console.error("Fetch error:", err));
   }, [id]);
 
   return (
     <div>
-      {lend && (
+      {lend ? (
         <>
           <h1>Lend {lend.alguskoht} → {lend.sihtkoht}</h1>
           <div>
@@ -57,11 +64,13 @@ export default function LendDetail() {
           <ul>
             {kohad.map((iste) => (
               <li key={iste.id}>
-                Rida: {iste.reanumber}, Koht: {iste.istmetaht}, Hõivatud: {iste.kasvaba ? "Jah" : "Ei"}
+                Rida: {iste.reanumber}, Koht: {iste.istmetaht}, Hõivatud: {iste.kasvaba ? "Ei" : "Jah"}
               </li>
             ))}
           </ul>
         </>
+      ) : (
+        <p>Laen andmeid...</p>
       )}
     </div>
   );
