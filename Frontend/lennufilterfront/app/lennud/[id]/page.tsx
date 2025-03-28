@@ -24,24 +24,16 @@ export default function LendDetail() {
   const { id } = useParams();
   const [kohad, setKohad] = useState<Iste[]>([]);
   const [lend, setLend] = useState<Lend | null>(null);
-  const [aknaAll, setAknaAll] = useState(false);
-  const [ruumiga, setRuumiga] = useState(false);
-  const [lähimVäljapääs, setLähimVäljapääs] = useState(false);
-  const [kõrvuti, setKõrvuti] = useState(0);
 
   useEffect(() => {
     if (!id) return;
 
-    console.log("Lennu ID:", id);
-
     fetch(`http://localhost:8080/api/lend/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("Saadud andmed:", data);
-
         if (data.length > 0) {
-          setLend(data[0].lend); 
-          setKohad(data);        
+          setLend(data[0].lend);
+          setKohad(data);
         } else {
           setLend(null);
           setKohad([]);
@@ -50,122 +42,54 @@ export default function LendDetail() {
       .catch((err) => console.error("Fetch error:", err));
   }, [id]);
 
-  const filterKohad = () => {
-    const vabadKohad = kohad.filter((iste) => {
-      return (
-        iste.kasvaba && 
-        (aknaAll ? (iste.istmetaht === "A" || iste.istmetaht === "F") : true) &&
-        (ruumiga ? (iste.istmetaht === "C" || iste.istmetaht === "D") : true) &&
-        (lähimVäljapääs ? (iste.reanumber >= 1 && iste.reanumber <= 5 || iste.reanumber >= 25 && iste.reanumber <= 30) : true) 
-      );
-    });
-
-    return vabadKohad;
-  };
-
-  const findAdjacentSeats = (vabadKohad: Iste[], numIstmeid: number) => {
-    const sobivadKohad: Iste[][] = [];
-
-    for (let i = 0; i < vabadKohad.length - numIstmeid + 1; i++) {
-      let temp = [vabadKohad[i]];
-
-      for (let j = 1; j < numIstmeid; j++) {
-        if (vabadKohad[i + j].kasvaba) {
-          temp.push(vabadKohad[i + j]);
-        } else {
-          break;
-        }
-      }
-
-      if (temp.length === numIstmeid) {
-        sobivadKohad.push(temp);
-      }
-    }
-
-    return sobivadKohad;
-  };
-
-  const kohadFiltreeritud = filterKohad();
-  const kõrvutiIstmed = kõrvuti > 0 ? findAdjacentSeats(kohadFiltreeritud, kõrvuti) : [];
+  const istmeTähestik = ["A", "B", "C", "D", "E", "F"];
+  const read = 15; // 15 rida
 
   return (
     <div>
       {lend ? (
         <>
           <h1>Lend {lend.alguskoht} → {lend.sihtkoht}</h1>
-          <div>
-            <h2>Lennu info</h2>
-            <p>
-              {lend.alguskoht} → {lend.sihtkoht} ({lend.kuupaev})<br />
-              Lennufirma: {lend.lennufirma}<br />
-              Hind: {lend.hind}€<br />
-              Lennu aeg: {lend.lennuaeg} tundi
-            </p>
-          </div>
-          <div>
-            <h2>Filtrid</h2>
-            <label>
-              <input
-                type="checkbox"
-                checked={aknaAll}
-                onChange={() => setAknaAll(!aknaAll)}
-              />
-              Akna all
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={ruumiga}
-                onChange={() => setRuumiga(!ruumiga)}
-              />
-              Rohkem ruumi
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={lähimVäljapääs}
-                onChange={() => setLähimVäljapääs(!lähimVäljapääs)}
-              />
-              Lähedal väljapääsule
-            </label>
-            <label>
-              Kõrvuti istmed (sisesta number):
-              <input
-                type="number"
-                value={kõrvuti}
-                onChange={(e) => setKõrvuti(Number(e.target.value))}
-                min={0}
-              />
-            </label>
-          </div>
+          <p>
+            {lend.alguskoht} → {lend.sihtkoht} ({lend.kuupaev})<br />
+            Lennufirma: {lend.lennufirma}<br />
+            Hind: {lend.hind}€<br />
+            Lennu aeg: {lend.lennuaeg} tundi
+          </p>
+
           <h2>Istmeplaan</h2>
-          <ul>
-            {kõrvutiIstmed.length > 0 ? (
-              <li>
-                Kõrvuti sobivad istmed:
-                <ul>
-                  {kõrvutiIstmed.map((kohaGrupp, index) => (
-                    <li key={index}>
-                      {kohaGrupp.map((iste) => (
-                        <span key={iste.id}>{iste.reanumber}{iste.istmetaht} </span>
-                      ))}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ) : (
-              <li>Kõrvuti istmeid ei leitud</li>
+          <svg width="500" height="800">
+            {Array.from({ length: read }).map((_, rowIndex) =>
+              istmeTähestik.map((col, colIndex) => {
+                const iste = kohad.find(
+                  (iste) => iste.reanumber === rowIndex + 1 && iste.istmetaht === col
+                );
+
+                const x = (col === "D" || col == "E" || col == "F") ? colIndex * 50 + 30 : colIndex * 50;
+
+                const y = rowIndex * 50;
+
+                return (
+                  <g key={`${rowIndex}-${col}`}>
+                    <rect
+                      x={x}
+                      y={y}
+                      width="40"
+                      height="40"
+                      rx="8"
+                      ry="8"
+                      stroke="black"
+                      strokeWidth="2"
+                      fill={iste ? (iste.kasvaba ? "lightgreen" : "red") : "lightgreen"}
+                    />
+                    <text x={x + 20} y={y + 25} textAnchor="middle" fontSize="12">
+                      {rowIndex + 1}{col}
+                    </text>
+                  </g>
+                );
+              })
             )}
-            {kohadFiltreeritud.length > 0 ? (
-              kohadFiltreeritud.map((iste) => (
-                <li key={iste.id}>
-                  Rida {iste.reanumber}, Koht {iste.istmetaht}, {iste.kasvaba ? "Vaba" : "Hõivatud"}
-                </li>
-              ))
-            ) : (
-              <p>Ei leitud vabu kohti vastavalt valitud filtritele.</p>
-            )}
-          </ul>
+          </svg>
         </>
       ) : (
         <p>Laen andmeid...</p>
