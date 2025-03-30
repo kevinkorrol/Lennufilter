@@ -1,9 +1,9 @@
 "use client";
 import ReactDOM from 'react-dom/client';
-
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import styles from "./id.module.css";
+import { SourceTextModule } from 'vm';
 
 declare global {
   interface Window {
@@ -43,6 +43,22 @@ export default function LendDetail() {
   });
 
   useEffect(() => {
+    console.log("Filters updated, rebuilding SVG...");
+    
+    if (!window.svgRoot) {
+      const svgContainer = document.getElementById("istmeplaan");
+      if (svgContainer) {
+        window.svgRoot = ReactDOM.createRoot(svgContainer);
+      }
+    }
+  
+    if (window.svgRoot) {
+      window.svgRoot.render(buildsvg());
+    }
+  }, [filters]); // Re-run whenever filters change
+  
+
+  useEffect(() => {
     if (!id) return;
 
     fetch(`http://localhost:8080/api/lend/${id}`)
@@ -64,7 +80,7 @@ export default function LendDetail() {
 
   // Kontrollime, kas iste vastab filtrile
   const filterSeats = (iste: Iste) => {
-    console.log("filter")
+    console.log("filtreerimine")
     const { windowSeat, moreSpace, nearExit, nextToEachOther } = filters;
 
     // Akna all (A või F)
@@ -84,6 +100,8 @@ export default function LendDetail() {
 
   // Kõrvuti kohtade leidmine
   const isAdjacentSeats = (iste: Iste, requiredAdjacentSeats: number) => {
+  
+    console.log("kõrvutiistmed")
     // Otsime kõrvuti olevaid kohti samal real
     const sameRowSeats = kohad.filter(
       (k) => k.reanumber === iste.reanumber && k.kasvaba
@@ -112,40 +130,31 @@ export default function LendDetail() {
 
  
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("filterchange")
     const { name, value, type, checked } = e.target;
   
-    // Update filters state
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: type === "checkbox" ? checked : value === "" ? null : parseInt(value),
-    }));
+    setFilters((prevFilters) => {
+      const newFilters = {
+        ...prevFilters,
+        [name]: type === "checkbox" ? checked : value === "" ? null : parseInt(value),
+      };
   
-    // Get the SVG container
-    const svgContainer = document.getElementById("istmeplaan");
-  
-    if (svgContainer) {
-      // Initialize React root only once
-      if (!window.svgRoot) {
-        window.svgRoot = ReactDOM.createRoot(svgContainer);
-      }
-  
-      // Update the existing root with new SVG
-      window.svgRoot.render(buildsvg());
-    }
+      return newFilters;
+    });
   };
   
   
 
-  
 
   const buildsvg = () => {
+    console.log("BUILDSVG")
     return (
       <svg width="500" height="800">
             {Array.from({ length: read }).map((_, rowIndex) =>
               istmeTähestik.map((col, colIndex) => {
                 const iste = kohad.find(
                   (iste) => iste.reanumber === rowIndex + 1 && iste.istmetaht === col
-                );
+                ) || { id: -1, reanumber: rowIndex + 1, istmetaht: col, kasvaba: true };
 
                 const x = (col === "D" || col === "E" || col === "F") ? colIndex * 50 + 30 : colIndex * 50 + 1;
                 const y = rowIndex * 50 + 10;
