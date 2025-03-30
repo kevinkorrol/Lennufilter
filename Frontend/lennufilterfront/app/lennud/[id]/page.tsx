@@ -43,7 +43,6 @@ export default function LendDetail() {
   });
 
   useEffect(() => {
-    console.log("Filters updated, rebuilding SVG...");
     
     if (!window.svgRoot) {
       const svgContainer = document.getElementById("istmeplaan");
@@ -80,7 +79,6 @@ export default function LendDetail() {
 
   // Kontrollime, kas iste vastab filtrile
   const filterSeats = (iste: Iste) => {
-    console.log("filtreerimine")
     const { windowSeat, moreSpace, nearExit, nextToEachOther } = filters;
 
     // Akna all (A või F)
@@ -92,15 +90,14 @@ export default function LendDetail() {
     // Lähedal väljapääsule (read 1-5 ja 11-15)
     const isNearExit = nearExit && (iste.reanumber <= 5 || (iste.reanumber >= 11 && iste.reanumber <= 15));
 
-    // Kõrvuti olevate kohtade kontrollimine (kui määratud)
     const isNextToEachOther = nextToEachOther && nextToEachOther > 0 && isAdjacentSeats(iste, nextToEachOther);
 
     return isWindowSeat || isMoreSpace || isNearExit || isNextToEachOther;
   };
 
   // Kõrvuti kohtade leidmine
+  // Kõrvuti kohtade leidmine
   const isAdjacentSeats = (iste: Iste, requiredAdjacentSeats: number) => {
-    console.log("Kontrollin kõrvuti kohti:", iste);
   
     // Loome täieliku istmeplaani (kõik võimalikud kohad A - F ja read 1-15)
     const allSeats: Iste[] = [];
@@ -113,33 +110,53 @@ export default function LendDetail() {
     }
   
     // Leia kõik vabad istmed samal real
-    const sameRowSeats = allSeats.filter((k) => k.reanumber === iste.reanumber && k.kasvaba);
+    const sameRowSeats = allSeats.filter((k) => k.reanumber === iste.reanumber);
   
-    // Sorteeri tähestikulises järjekorras
-    const sortedSeats = sameRowSeats.map((k) => k.istmetaht).sort((a, b) => 
-      istmeTähestik.indexOf(a) - istmeTähestik.indexOf(b)
-    );
+    // Jagame vabad istmed järjestikusteks massiivideks, kui koht on kinni
+    const seatGroups: string[][] = [];
+    let currentGroup: string[] = [];
   
-    let adjacentSeats = 0;
-    let maxAdjacentSeats = 0;
-  
-    // Kontrollige järjestikuseid kohti
-    for (let i = 0; i < sortedSeats.length; i++) {
-      if (i > 0 && istmeTähestik.indexOf(sortedSeats[i]) === istmeTähestik.indexOf(sortedSeats[i - 1]) + 1) {
-        adjacentSeats += 1;
+    sameRowSeats.forEach((k) => {
+      if (k.kasvaba) {
+        // Kui koht on vaba, lisame selle grupi
+        currentGroup.push(k.istmetaht);
       } else {
-        adjacentSeats = 1; // Kui ei ole järjestikune, alustame uuesti
+        // Kui koht on kinni, lõpetame grupi ja alustame uut
+        if (currentGroup.length > 0) {
+          seatGroups.push(currentGroup); // Lisa gruppi ainult siis, kui see pole tühi
+        }
+        currentGroup = []; // Alusta uut gruppi pärast kinni olevat kohta
       }
+    });
+
+
   
-      // Hoidke maksimaalset järjestikuste kohtade arvu
-      maxAdjacentSeats = Math.max(maxAdjacentSeats, adjacentSeats);
+    // Lõpeta viimane grupp, kui see ei ole tühi
+    if (currentGroup.length > 0) {
+      seatGroups.push(currentGroup);
     }
+    
+    // Kontrollime, kas iga grupp sisaldab vähemalt `requiredAdjacentSeats` järjestikust vaba kohta
+    let kasOnVabuKohtiPiisavalt = false;
   
-    console.log(`Leitud kõrvuti kohti: ${maxAdjacentSeats}, nõutud: ${requiredAdjacentSeats}`);
+
+    seatGroups.forEach((group) => {
+      // Kontrollige, kas grupp sisaldab vähemalt `requiredAdjacentSeats` järjestikuseid kohti
+      if (group.length >= requiredAdjacentSeats) {
+        // Kui grupp on piisavalt pikk, kontrollige, kas meie soovitud iste kuulub sellesse gruppi
+        if (group.includes(iste.istmetaht)) {
+          kasOnVabuKohtiPiisavalt = true;
+        }
+      }
+    });
   
     // Tagasta, kas leiti piisavalt kõrvuti kohti
-    return maxAdjacentSeats >= requiredAdjacentSeats;
+    return kasOnVabuKohtiPiisavalt;
   };
+  
+  
+  
+
   
 
   const formatLennuAeg = (lennuaeg: number): string => {
@@ -151,7 +168,6 @@ export default function LendDetail() {
 
  
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("filterchange")
     const { name, value, type, checked } = e.target;
   
     setFilters((prevFilters) => {
@@ -168,7 +184,6 @@ export default function LendDetail() {
 
 
   const buildsvg = () => {
-    console.log("BUILDSVG")
     return (
       <svg width="500" height="800">
             {Array.from({ length: read }).map((_, rowIndex) =>
