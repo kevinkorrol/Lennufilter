@@ -100,26 +100,47 @@ export default function LendDetail() {
 
   // Kõrvuti kohtade leidmine
   const isAdjacentSeats = (iste: Iste, requiredAdjacentSeats: number) => {
+    console.log("Kontrollin kõrvuti kohti:", iste);
   
-    console.log("kõrvutiistmed")
-    // Otsime kõrvuti olevaid kohti samal real
-    const sameRowSeats = kohad.filter(
-      (k) => k.reanumber === iste.reanumber && k.kasvaba
-    );
-
-    // Filtreerime järjestatud kohti (kõrvuti)
-    const sortedSeats = sameRowSeats.map((k) => k.istmetaht).sort();
-
-    let adjacentSeats = 0;
-
-    for (let i = 0; i < sortedSeats.length - 1; i++) {
-      if (istmeTähestik.indexOf(sortedSeats[i]) + 1 === istmeTähestik.indexOf(sortedSeats[i + 1])) {
-        adjacentSeats += 1;
+    // Loome täieliku istmeplaani (kõik võimalikud kohad A - F ja read 1-15)
+    const allSeats: Iste[] = [];
+    for (let row = 1; row <= read; row++) {
+      for (const letter of istmeTähestik) {
+        const existingSeat = kohad.find((k) => k.reanumber === row && k.istmetaht === letter);
+        // Kui koht on olemas, siis seda muudame, et see oleks hõivatud, kui andmebaasis on
+        allSeats.push(existingSeat || { id: -1, reanumber: row, istmetaht: letter, kasvaba: true });
       }
     }
-
-    return adjacentSeats >= requiredAdjacentSeats;
+  
+    // Leia kõik vabad istmed samal real
+    const sameRowSeats = allSeats.filter((k) => k.reanumber === iste.reanumber && k.kasvaba);
+  
+    // Sorteeri tähestikulises järjekorras
+    const sortedSeats = sameRowSeats.map((k) => k.istmetaht).sort((a, b) => 
+      istmeTähestik.indexOf(a) - istmeTähestik.indexOf(b)
+    );
+  
+    let adjacentSeats = 0;
+    let maxAdjacentSeats = 0;
+  
+    // Kontrollige järjestikuseid kohti
+    for (let i = 0; i < sortedSeats.length; i++) {
+      if (i > 0 && istmeTähestik.indexOf(sortedSeats[i]) === istmeTähestik.indexOf(sortedSeats[i - 1]) + 1) {
+        adjacentSeats += 1;
+      } else {
+        adjacentSeats = 1; // Kui ei ole järjestikune, alustame uuesti
+      }
+  
+      // Hoidke maksimaalset järjestikuste kohtade arvu
+      maxAdjacentSeats = Math.max(maxAdjacentSeats, adjacentSeats);
+    }
+  
+    console.log(`Leitud kõrvuti kohti: ${maxAdjacentSeats}, nõutud: ${requiredAdjacentSeats}`);
+  
+    // Tagasta, kas leiti piisavalt kõrvuti kohti
+    return maxAdjacentSeats >= requiredAdjacentSeats;
   };
+  
 
   const formatLennuAeg = (lennuaeg: number): string => {
     const tunnid = Math.floor(lennuaeg); // Täisarv osa ehk tunnid
