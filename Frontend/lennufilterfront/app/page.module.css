@@ -11,8 +11,8 @@
   align-items: center;
   justify-items: center;
   min-height: 100svh;
-  padding: 80px;
-  gap: 64px;
+  padding: 210px;
+  gap: 32px;
   font-family: var(--font-geist-sans);
 }
 
@@ -30,7 +30,7 @@
 .main {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
   grid-row-start: 2;
 }
 
@@ -108,7 +108,7 @@ a.secondary {
   flex-shrink: 0;
 }
 
-/* Enable hover only on non-touch devices */
+
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {
     background: var(--button-primary-hover);

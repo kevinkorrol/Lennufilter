@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import styles from "./id.module.css";
 
 declare global {
   interface Window {
@@ -102,37 +103,38 @@ export default function LendDetail() {
     return adjacentSeats >= requiredAdjacentSeats;
   };
 
+  const formatLennuAeg = (lennuaeg: number): string => {
+    const tunnid = Math.floor(lennuaeg); // Täisarv osa ehk tunnid
+    const minutid = Math.round((lennuaeg - tunnid) * 60); // Kümnendmurd osa teisendada minutiteks
+    return `${tunnid}:${minutid < 10 ? "0" + minutid : minutid}`; // Kui minutid on ühekohalised, siis lisame ette nulli
+
+  };
 
  
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
   
-    // Filtrite seisundi värskendamine
-    if (type === "checkbox") {
-      setFilters({
-        ...filters,
-        [name]: checked
-      });
-    } else if (type === "number") {
-      setFilters({
-        ...filters,
-        [name]: value === "" ? null : parseInt(value) // Eemaldame vaikeväärtuse
-      });
-    }
+    // Update filters state
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [name]: type === "checkbox" ? checked : value === "" ? null : parseInt(value),
+    }));
   
-    // Pärast filtrite muutmist asendame SVG
-    const svgElement = document.getElementById("istmeplaan");
+    // Get the SVG container
+    const svgContainer = document.getElementById("istmeplaan");
   
-    if (svgElement) {
-      // Kui root pole veel loodud, siis loome ta
+    if (svgContainer) {
+      // Initialize React root only once
       if (!window.svgRoot) {
-        window.svgRoot = ReactDOM.createRoot(svgElement); // Loome root elementi ainult üks kord
+        window.svgRoot = ReactDOM.createRoot(svgContainer);
       }
   
-      // Uuendame SVG sisu
+      // Update the existing root with new SVG
       window.svgRoot.render(buildsvg());
     }
   };
+  
+  
 
   
 
@@ -145,10 +147,9 @@ export default function LendDetail() {
                   (iste) => iste.reanumber === rowIndex + 1 && iste.istmetaht === col
                 );
 
-                const x = (col === "D" || col === "E" || col === "F") ? colIndex * 50 + 30 : colIndex * 50;
-                const y = rowIndex * 50;
+                const x = (col === "D" || col === "E" || col === "F") ? colIndex * 50 + 30 : colIndex * 50 + 1;
+                const y = rowIndex * 50 + 10;
 
-                // Filtreerimine, et määrata, milliseid kohti värvida
                 const fillColor = iste ? (iste.kasvaba && filterSeats(iste) ? "lightblue" : (iste.kasvaba ? "lightgreen" : "red")) : "lightgreen";
 
                 return (
@@ -178,63 +179,44 @@ export default function LendDetail() {
   return (
     <div>
       {lend ? (
-        <>
-          <h1>Lend {lend.alguskoht} → {lend.sihtkoht}</h1>
+        <div className={styles.container}>
+        <div className={styles.lennuInfo}>
           <p>
-            {lend.alguskoht} → {lend.sihtkoht} ({lend.kuupaev})<br />
-            Lennufirma: {lend.lennufirma}<br />
-            Hind: {lend.hind}€<br />
-            Lennu aeg: {lend.lennuaeg} tundi
+            {lend.alguskoht} → {lend.sihtkoht} ({lend.kuupaev})&nbsp;
+            Lennufirma: {lend.lennufirma}&nbsp;
+            Hind: {lend.hind}€&nbsp;
+            Lennu aeg: {formatLennuAeg(lend.lennuaeg)}
           </p>
-
-          {/* Filtrite paneel */}
-          <div>
-            <label>
-              <input
-                type="checkbox"
-                name="windowSeat"
-                checked={filters.windowSeat}
-                onChange={handleFilterChange}
-              />
-              Akna all (A või F)
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="moreSpace"
-                checked={filters.moreSpace}
-                onChange={handleFilterChange}
-              />
-              Rohkem ruumi (C või D)
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="nearExit"
-                checked={filters.nearExit}
-                onChange={handleFilterChange}
-              />
-              Lähedal väljapääsule (read 1-5 ja 11-15)
-            </label>
-            <label>
-              Kõrvuti (sisesta number): 
-              <input
-                type="number"
-                name="nextToEachOther"
-                value={filters.nextToEachOther || ""} // Eemaldame vaikeväärtuse
-                onChange={handleFilterChange}
-              />
-            </label>
-          </div>
-
-          <h2>Istmeplaan</h2>
-          <div id="istmeplaan">
+        </div>
+      
+        <div className={styles.content}>
+          <div id="istmeplaan" className={styles.istmeplaan}>
             {buildsvg()}
           </div>
-          
-        </>
-      ) : (
-        <p>Laen andmeid...</p>
+      
+          <div className={styles.filters}>
+            <h3>Vali filtrid:</h3>
+            <label>
+              Akna all:
+              <input type="checkbox" name="windowSeat" checked={filters.windowSeat} onChange={handleFilterChange} />
+            </label>
+            <label>
+              Rohkem ruumi:
+              <input type="checkbox" name="moreSpace" checked={filters.moreSpace} onChange={handleFilterChange} />
+            </label>
+            <label>
+              Lähedal väljapääsule:
+              <input type="checkbox" name="nearExit" checked={filters.nearExit} onChange={handleFilterChange} />
+            </label>
+            <label>
+              Mitu kõrvuti kohta: 
+              <input type="number" name="nextToEachOther" value={filters.nextToEachOther || ""} onChange={handleFilterChange} min="0" />
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      ) : ( <p>Laen andmeid...</p>
       )}
     </div>
   );

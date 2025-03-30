@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import styles from "./lennud.module.css";
 
 type Lend = {
   id: number;
@@ -35,7 +36,6 @@ export default function LendudeLeht() {
   }, []);
 
   useEffect(() => {
-
     setFiltreeritudLennud(
       lennud.filter((lend) => {
         return (
@@ -51,8 +51,6 @@ export default function LendudeLeht() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     const value = e.target.value;
-
-
     const numericValue = value ? parseFloat(value) : 0;
 
     setFiltrid((prevFiltrid) => ({
@@ -62,20 +60,18 @@ export default function LendudeLeht() {
   };
 
   const formatLennuAeg = (lennuaeg: number): string => {
-    const tunnid = Math.floor(lennuaeg); // Täisarv osa ehk tunnid
-    const minutid = Math.round((lennuaeg - tunnid) * 60); // Kümnendmurd osa teisendada minutiteks
-    return `${tunnid}:${minutid < 10 ? "0" + minutid : minutid}`; // Kui minutid on ühekohalised, siis lisame ette nulli
-
+    const tunnid = Math.floor(lennuaeg);
+    const minutid = Math.round((lennuaeg - tunnid) * 60);
+    return `${tunnid}:${minutid < 10 ? "0" + minutid : minutid}`;
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Lennud</h1>
 
-      <div>
-        <h2>Filtreeri lennud</h2>
+      <div className={styles.filters}>
         <div>
-          <label>Lähtekoht: </label>
+          <label>Lähtekoht</label>
           <input
             type="text"
             value={filtrid.alguskoht}
@@ -83,7 +79,7 @@ export default function LendudeLeht() {
           />
         </div>
         <div>
-          <label>Sihtkoht: </label>
+          <label>Sihtkoht</label>
           <input
             type="text"
             value={filtrid.sihtkoht}
@@ -91,7 +87,7 @@ export default function LendudeLeht() {
           />
         </div>
         <div>
-          <label>Kuupäev: </label>
+          <label>Kuupäev</label>
           <input
             type="date"
             value={filtrid.kuupaev}
@@ -99,7 +95,7 @@ export default function LendudeLeht() {
           />
         </div>
         <div>
-          <label>Lennu aeg (tundi): </label>
+          <label>Lennu aeg (h)</label>
           <input
             type="number"
             value={filtrid.lennuaeg || ""}
@@ -107,7 +103,7 @@ export default function LendudeLeht() {
           />
         </div>
         <div>
-          <label>Hind (€): </label>
+          <label>Hind (€)</label>
           <input
             type="number"
             value={filtrid.hind || ""}
@@ -116,14 +112,18 @@ export default function LendudeLeht() {
         </div>
       </div>
 
-      <ul>
+      <ul className={styles.lennudList}>
         {filtreeritudLennud.map((lend) => (
-          <li key={lend.id}>
-            {lend.alguskoht} → {lend.sihtkoht} ({lend.kuupaev})<br />
-            Lennufirma: {lend.lennufirma}, Lennu aeg: {formatLennuAeg(lend.lennuaeg)}, Hind: {lend.hind}€
-            <br />
+          <li key={lend.id} className={styles.lennuKast}>
+            <div className={styles.lennuInfo}>
+              <span>{lend.alguskoht} → {lend.sihtkoht}</span>
+              <span> Kuupäev: {lend.kuupaev}</span>
+              <span>Lennufirma: {lend.lennufirma}</span>
+              <span>Lennu aeg: {formatLennuAeg(lend.lennuaeg)}</span>
+              <span>Hind: {lend.hind}€</span>
+            </div>
             <Link href={`/lennud/${lend.id}`}>
-              <button>Vali lend</button>
+              <button className={styles.nupp}>Vaata kohti</button>
             </Link>
           </li>
         ))}
