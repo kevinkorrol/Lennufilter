@@ -10,3 +10,6 @@ Front:
 
 Back:
 - Springboot
+
+
+Rakenduse käivitamiseks piisab Dockeri konteineri käivitamisest
