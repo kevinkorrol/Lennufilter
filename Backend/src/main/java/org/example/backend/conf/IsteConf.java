@@ -11,6 +11,7 @@ import org.springframework.core.annotation.Order;
 
 import java.util.*;
 
+//Loon Iste tüüpi elemente
 @Configuration
 public class IsteConf {
 
@@ -58,7 +59,6 @@ public class IsteConf {
 
                     String tahis = koht.split(" ")[1];
                     String nr = koht.split(" ")[0];
-                    boolean kinnisus;
                     if (kinni.contains(koht)){
                         Iste iste = new Iste(lend, Integer.parseInt(nr), tahis, false);
                         istmerepo.save(iste);
@@ -68,8 +68,6 @@ public class IsteConf {
             //A, F - akna all
             //C, D - rohkem ruumi
             //Read 1 kuni 5, a-4 kuni a - lähedal väljapääsule
-            //Vb pole vaja teha eraldi istmetüüpi, vaid saan kuskil hiljem
-            // filtreerida vastaval oma ärireeglitele
         };
     }
 }

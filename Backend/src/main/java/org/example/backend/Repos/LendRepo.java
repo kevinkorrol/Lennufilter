@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+//Suhtlus andmebaasiga(andmete salvestamine, pärimine, muutmine jne)
 
 @Repository
 public interface LendRepo extends JpaRepository<Lend, Long> {

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//Suhtlus frontendiga
+
 @RestController
 @RequestMapping(path = "api")
 @CrossOrigin(origins = "http://localhost:3000")

@@ -13,6 +13,9 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+
+//Loon Lend tüüpi elemente
+
 @Configuration
 public class LendConf {
 

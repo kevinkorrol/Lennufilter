@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
 
+//Äriloogika ja andmete vahendamine Repo ja API vahel
+
 @Service
 public class LendService {
 

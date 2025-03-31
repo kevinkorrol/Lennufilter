@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+//Äriloogika ja andmete vahendamine Repo ja API vahel
+
+
 @Service
 public class IsteService {
 

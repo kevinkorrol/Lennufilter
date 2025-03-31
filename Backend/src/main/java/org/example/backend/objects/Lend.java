@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Duration;
 
+//Entity klass ehk määran ära, milline peab olema Lend objekt ning kuidas ta andmebaasi talletatakse
 
 @Entity(name = "lend")
 @Table(name = "lennud")
