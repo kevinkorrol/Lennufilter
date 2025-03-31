@@ -23,7 +23,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - DATABASE_URL=jdbc:postgresql://db:5432/mydatabase
-      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_USERNAME=name
       - SPRING_DATASOURCE_PASSWORD=password
     depends_on:
       - db
@@ -36,7 +36,7 @@ services:
     environment:
       - POSTGRES_USER=name
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=mydatabase
+      - POSTGRES_DB=lennud
     ports:
       - "5432:5432"
 
