@@ -12,25 +12,29 @@ services:
       - NODE_ENV=production
     depends_on:
       - backend
+    command: ["npm", "run", "start"]
 
   backend:
     build: ./backend
     ports:
-      - "5000:5000"
+      - "8080:8080"
     volumes:
       - ./backend:/app
     environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://user:password@db:5432/mydatabase
+      - SPRING_PROFILES_ACTIVE=prod
+      - DATABASE_URL=jdbc:postgresql://db:5432/mydatabase
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=password
     depends_on:
       - db
+    command: ["java", "-jar", "/app/my-app.jar"]
 
   db:
     image: postgres:13
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=name
+      - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=mydatabase
     ports:
