@@ -12,4 +12,4 @@ Back:
 - Springboot
 
 
-Rakenduse käivitamiseks piisab Dockeri konteineri käivitamisest
+Rakenduse käivitamiseks piisab Dockeri konteineri käivitamisest(Leht jookseb pordil 3000, backend 8080, andmebaas 5432)
