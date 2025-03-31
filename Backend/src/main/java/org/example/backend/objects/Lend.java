@@ -49,61 +49,6 @@ public class Lend {
 
     }
 
-    public String getAlguskoht() {
-        return alguskoht;
-    }
-
-    public void setAlguskoht(String alguskoht) {
-        this.alguskoht = alguskoht;
-    }
-
-    public LocalDate getKuupaev() {
-        return kuupaev;
-    }
-
-    public void setKuupaev(LocalDate kuupaev) {
-        this.kuupaev = kuupaev;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSihtkoht() {
-        return sihtkoht;
-    }
-
-    public void setSihtkoht(String sihtkoht) {
-        this.sihtkoht = sihtkoht;
-    }
-
-    public Double getLennuaeg() {
-        return lennuaeg;
-    }
-
-    public void setLennuaeg(Double lennuaeg) {
-        this.lennuaeg = lennuaeg;
-    }
-
-    public Double getHind() {
-        return hind;
-    }
-
-    public void setHind(Double hind) {
-        this.hind = hind;
-    }
-
-    public String getLennufirma() {
-        return lennufirma;
-    }
-
-    public void setLennufirma(String lennufirma) {
-        this.lennufirma = lennufirma;
-    }
 
     @Override
     public String toString() {

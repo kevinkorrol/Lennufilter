@@ -28,8 +28,4 @@ public class LendService {
     public void lisaUusLend(Lend lend) {
         lendRepo.save(lend);
     }
-
-    public Optional<Lend> getLendById(Long id) {
-        return lendRepo.findById(id);
-    }
 }

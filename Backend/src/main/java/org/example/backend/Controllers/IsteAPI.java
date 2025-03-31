@@ -21,11 +21,15 @@ public class IsteAPI {
         this.isteService = isteService;
     }
 
+
+    //Endpoint, mille kaudu saab kõik istmed
     @GetMapping("/istmed")
     public List<Iste> getIste(){
         return isteService.getIste();
     }
 
+
+    //Endpoint, mille kaudu saab konkreetse lennu istmed
     @GetMapping("/lend/{lennuId}")
     public List<Iste> getIstekohadByLennuId(@PathVariable("lennuId") Long lennuId) {
         return isteService.getIstekohadByLennuId(lennuId);
