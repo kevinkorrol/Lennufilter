@@ -1,9 +1,10 @@
-"use client";
+"use client"; // Määrab, et see komponent jookseb ainult kliendipoolselt.
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./lennud.module.css";
 
+// Lennu tüübi defineerimine
 type Lend = {
   id: number;
   sihtkoht: string;
@@ -15,7 +16,10 @@ type Lend = {
 };
 
 export default function LendudeLeht() {
+  // Hoiab kõiki lende
   const [lennud, setLennud] = useState<Lend[]>([]);
+
+  // Hoiab kasutaja valitud filtreid
   const [filtrid, setFiltrid] = useState({
     alguskoht: "",
     sihtkoht: "",
@@ -23,18 +27,22 @@ export default function LendudeLeht() {
     lennuaeg: 0,
     hind: 0,
   });
+
+  // Hoiab filtreeritud lende
   const [filtreeritudLennud, setFiltreeritudLennud] = useState<Lend[]>([]);
 
+  // Andmete laadimine serverist
   useEffect(() => {
-    fetch("http://localhost:8080/api/lend")
-      .then((res) => res.json())
+    fetch("http://localhost:8080/api/lend") // API kutse backendile
+      .then((res) => res.json()) // Vastuse teisendamine JSON-iks
       .then((data) => {
-        setLennud(data);
-        setFiltreeritudLennud(data);
+        setLennud(data); // Salvestame kõik lennud
+        setFiltreeritudLennud(data); // Alguses näitame kõiki lende
       })
-      .catch((err) => console.error("Fetch error:", err));
+      .catch((err) => console.error("Fetch error:", err)); // Vea logimine
   }, []);
 
+  // Filtreerib lennud vastavalt kasutaja sisestatud filtritele
   useEffect(() => {
     setFiltreeritudLennud(
       lennud.filter((lend) => {
@@ -49,6 +57,7 @@ export default function LendudeLeht() {
     );
   }, [filtrid, lennud]);
 
+  // Funktsioon, mis uuendab filtreid
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     const value = e.target.value;
     const numericValue = value ? parseFloat(value) : 0;
@@ -59,6 +68,7 @@ export default function LendudeLeht() {
     }));
   };
 
+  // Funktsioon, mis teisendab lennuaja tundideks ja minutiteks
   const formatLennuAeg = (lennuaeg: number): string => {
     const tunnid = Math.floor(lennuaeg);
     const minutid = Math.round((lennuaeg - tunnid) * 60);
@@ -69,6 +79,7 @@ export default function LendudeLeht() {
     <div className={styles.container}>
       <h1>Lennud</h1>
 
+      {/* Filtri sisestusväljad */}
       <div className={styles.filters}>
         <div>
           <label>Lähtekoht</label>
@@ -112,6 +123,7 @@ export default function LendudeLeht() {
         </div>
       </div>
 
+      {/* Lennuloend */}
       <ul className={styles.lennudList}>
         {filtreeritudLennud.map((lend) => (
           <li key={lend.id} className={styles.lennuKast}>
@@ -122,6 +134,7 @@ export default function LendudeLeht() {
               <span>Lennu aeg: {formatLennuAeg(lend.lennuaeg)}</span>
               <span>Hind: {lend.hind}€</span>
             </div>
+            {/* Link konkreetsele lennule */}
             <Link href={`/lennud/${lend.id}`}>
               <button className={styles.nupp}>Vaata kohti</button>
             </Link>
