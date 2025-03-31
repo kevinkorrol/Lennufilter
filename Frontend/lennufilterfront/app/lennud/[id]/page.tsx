@@ -201,7 +201,7 @@ const buildsvg = () => {//Joonistan istmete plaani
               const x = (col === "D" || col === "E" || col === "F") ? colIndex * 50 + 30 : colIndex * 50 + 1;//Et tekiks "vahekäik" joonisel
               const y = rowIndex * 50 + 10;
 
-              const fillColor = iste ? (iste.kasvaba && filterSeats(iste) ? "lightblue" : (iste.kasvaba ? "lightgreen" : "red")) : "lightgreen";
+              const fillColor = iste ? (iste.kasvaba && filterSeats(iste) ? "lightblue" : (iste.kasvaba ? "lightgreen" : "tomato")) : "lightgreen";
 
               return (
                 <g key={`${rowIndex}-${col}`}>
