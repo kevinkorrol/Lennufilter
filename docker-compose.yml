@@ -34,7 +34,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=user
+      - POSTGRES_USER=name
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=mydatabase
     ports:
