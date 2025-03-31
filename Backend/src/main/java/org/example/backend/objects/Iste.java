@@ -37,6 +37,49 @@ public class Iste {
 
     }
 
+    // Getters and setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getReanumber() {
+        return reanumber;
+    }
+
+    public void setReanumber(int reanumber) {
+        this.reanumber = reanumber;
+    }
+
+    public String getIstmetaht() {
+        return istmetaht;
+    }
+
+    public void setIstmetaht(String istmetaht) {
+        this.istmetaht = istmetaht;
+    }
+
+    public boolean isKasvaba() {
+        return kasvaba;
+    }
+
+    public void setKasvaba(boolean kasvaba) {
+        this.kasvaba = kasvaba;
+    }
+
+
+    public Lend getLend() {
+        return lend;
+    }
+
+    public void setLend(Lend lend) {
+        this.lend = lend;
+    }
+
     @Override
     public String toString() {
         return "Iste{" +
